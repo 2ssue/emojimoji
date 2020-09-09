@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, globalShortcut} = require('electron');
 const path = require('path');
 
 function createWindow(){
@@ -11,12 +11,15 @@ function createWindow(){
     });
     mainWindow.loadURL('http://localhost:3000');
     // mainWindow.loadFile('index.html');
+    
     //Open DevTools
     mainWindow.webContents.openDevTools();
+
+    return mainWindow;
 }
 
 app.whenReady().then(() => {
-    createWindow();
+    const window = createWindow();
 
     app.on('activate', () => {
         if(BrowserWindow.getAllWindows().length === 0){
@@ -27,6 +30,13 @@ app.whenReady().then(() => {
     app.on('window-all-closed', () => {
         if(process.platform !== 'darwin'){ //macOS
             app.quit();
+        }
+    });
+
+    globalShortcut.register('CommandOrControl+P', () => {
+        if(window){
+            window.restore();
+            window.focus();
         }
     })
 })
