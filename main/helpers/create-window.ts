@@ -5,16 +5,23 @@ import {
 } from 'electron';
 import Store from 'electron-store';
 
+interface Position {
+  x?: number;
+  y?: number;
+  width: number;
+  height: number;
+}
+
 export default (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
   const key = 'window-state';
   const name = `window-state-${windowName}`;
-  const store = new Store({ name });
+  const store = new Store<Position>({ name });
   const defaultSize = {
     width: options.width,
     height: options.height,
   };
   let state = {};
-  let win;
+  let win: BrowserWindow;
 
   const restore = () => store.get(key, defaultSize);
 
@@ -29,7 +36,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     };
   };
 
-  const windowWithinBounds = (windowState, bounds) => {
+  const windowWithinBounds = (windowState: Position, bounds: Position): boolean => {
     return (
       windowState.x >= bounds.x &&
       windowState.y >= bounds.y &&
@@ -38,15 +45,15 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     );
   };
 
-  const resetToDefaults = () => {
-    const bounds = screen.getPrimaryDisplay().bounds;
+  const resetToDefaults = (): Position => {
+    const {bounds} = screen.getPrimaryDisplay();
     return Object.assign({}, defaultSize, {
       x: (bounds.width - defaultSize.width) / 2,
       y: (bounds.height - defaultSize.height) / 2,
     });
   };
 
-  const ensureVisibleOnSomeDisplay = windowState => {
+  const ensureVisibleOnSomeDisplay = (windowState: Position) => {
     const visible = screen.getAllDisplays().some(display => {
       return windowWithinBounds(windowState, display.bounds);
     });
