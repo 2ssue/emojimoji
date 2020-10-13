@@ -1,39 +1,31 @@
 {
-  "name": "emojimoji",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
-  },
-  "main": "src/electron/main.js",
+  "name": "emojimoji",
+  "version": "1.0.0",
+  "author": "2ssue <e2ssue@gmail.com>",
+  "main": "app/background.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron": "electron ."
+    "dev": "nextron",
+    "build": "nextron build",
+    "postinstall": "electron-builder install-app-deps"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "electron-serve": "^1.0.0",
+    "electron-store": "^6.0.0"
   },
   "devDependencies": {
-    "electron": "^10.1.1"
+    "@babel/core": "^7.11.6",
+    "@types/node": "^14.6.4",
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
+    "babel-loader": "^8.1.0",
+    "electron": "^10.1.1",
+    "electron-builder": "^22.8.0",
+    "next": "9.3.6",
+    "nextron": "^5.15.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.2"
   }
 }
