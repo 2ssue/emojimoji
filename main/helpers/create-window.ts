@@ -12,16 +12,19 @@ interface Position {
   height: number;
 }
 
-export default (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
+export default (
+    windowName: string,
+    options: BrowserWindowConstructorOptions,
+): BrowserWindow => {
   const key = 'window-state';
   const name = `window-state-${windowName}`;
-  const store = new Store<Position>({ name });
+  const store = new Store<Position>({name});
   const defaultSize = {
     width: options.width,
     height: options.height,
   };
   let state = {};
-  let win: BrowserWindow;
+  let win: BrowserWindow = null;
 
   const restore = () => store.get(key, defaultSize);
 
@@ -36,7 +39,10 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     };
   };
 
-  const windowWithinBounds = (windowState: Position, bounds: Position): boolean => {
+  const windowWithinBounds = (
+      windowState: Position,
+      bounds: Position,
+  ): boolean => {
     return (
       windowState.x >= bounds.x &&
       windowState.y >= bounds.y &&
@@ -54,7 +60,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
   };
 
   const ensureVisibleOnSomeDisplay = (windowState: Position) => {
-    const visible = screen.getAllDisplays().some(display => {
+    const visible = screen.getAllDisplays().some((display) => {
       return windowWithinBounds(windowState, display.bounds);
     });
     if (!visible) {

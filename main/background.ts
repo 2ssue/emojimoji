@@ -1,11 +1,11 @@
-import { app } from 'electron';
+import {app, ipcMain} from 'electron';
 import serve from 'electron-serve';
-import { createWindow } from './helpers';
+import {createWindow} from './helpers';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
 if (isProd) {
-  serve({ directory: 'app' });
+  serve({directory: 'app'});
 } else {
   app.setPath('userData', `${app.getPath('userData')} (development)`);
 }
@@ -26,6 +26,16 @@ if (isProd) {
     mainWindow.webContents.openDevTools();
   }
 })();
+
+ipcMain.on('asynchronous-message', (event, arg) => {
+  console.log(arg); // "ping" 출력
+  event.reply('asynchronous-reply', 'pong');
+});
+
+ipcMain.on('synchronous-message', (event, arg) => {
+  console.log(arg); // "ping" 출력
+  event.returnValue = 'pong';
+});
 
 app.on('window-all-closed', () => {
   app.quit();
