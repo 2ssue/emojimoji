@@ -1,4 +1,4 @@
-import {app} from 'electron';
+import {app, globalShortcut} from 'electron';
 import serve from 'electron-serve';
 import {createWindow} from './helpers';
 
@@ -25,6 +25,19 @@ if (isProd) {
     await mainWindow.loadURL(`http://localhost:${port}/home`);
     mainWindow.webContents.openDevTools();
   }
+
+  globalShortcut.register('CommandOrControl+Shift+:', () => {
+    if (!mainWindow) return;
+    mainWindow.setVisibleOnAllWorkspaces(true);
+
+    mainWindow.restore();
+    mainWindow.focus();
+  });
+
+  app.on('browser-window-blur', () => {
+    mainWindow.setVisibleOnAllWorkspaces(false);
+    app.dock.hide();
+  });
 })();
 
 app.on('window-all-closed', () => {
