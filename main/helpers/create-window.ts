@@ -13,12 +13,12 @@ interface Position {
 }
 
 export default (
-    windowName: string,
-    options: BrowserWindowConstructorOptions,
+  windowName: string,
+  options: BrowserWindowConstructorOptions,
 ): BrowserWindow => {
   const key = 'window-state';
   const name = `window-state-${windowName}`;
-  const store = new Store<Position>({name});
+  const store = new Store<Position>({ name });
   const defaultSize = {
     width: options.width,
     height: options.height,
@@ -40,29 +40,27 @@ export default (
   };
 
   const windowWithinBounds = (
-      windowState: Position,
-      bounds: Position,
-  ): boolean => {
-    return (
-      windowState.x >= bounds.x &&
-      windowState.y >= bounds.y &&
-      windowState.x + windowState.width <= bounds.x + bounds.width &&
-      windowState.y + windowState.height <= bounds.y + bounds.height
-    );
-  };
+    windowState: Position,
+    bounds: Position,
+  ): boolean => (
+    windowState.x >= bounds.x
+      && windowState.y >= bounds.y
+      && windowState.x + windowState.width <= bounds.x + bounds.width
+      && windowState.y + windowState.height <= bounds.y + bounds.height
+  );
 
   const resetToDefaults = (): Position => {
-    const {bounds} = screen.getPrimaryDisplay();
-    return Object.assign({}, defaultSize, {
+    const { bounds } = screen.getPrimaryDisplay();
+    return {
+      ...defaultSize,
       x: (bounds.width - defaultSize.width) / 2,
       y: (bounds.height - defaultSize.height) / 2,
-    });
+    };
   };
 
   const ensureVisibleOnSomeDisplay = (windowState: Position) => {
-    const visible = screen.getAllDisplays().some((display) => {
-      return windowWithinBounds(windowState, display.bounds);
-    });
+    const visible = screen.getAllDisplays()
+      .some((display) => windowWithinBounds(windowState, display.bounds));
     if (!visible) {
       // Window is partially or fully not visible now.
       // Reset it to safe defaults.
