@@ -32,5 +32,7 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'linebreak-style': ['error', 'windows'],
+    'no-shadow': 'off',
+    'no-unused-vars': 'off',
   },
 };
