@@ -8,8 +8,8 @@ import Store from 'electron-store';
 interface Position {
   x?: number;
   y?: number;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }
 
 export default (
@@ -24,13 +24,13 @@ export default (
     height: options.height,
   };
   let state = {};
-  let win: BrowserWindow = null;
+  let win: BrowserWindow | null = null;
 
   const restore = () => store.get(key, defaultSize);
 
   const getCurrentPosition = () => {
-    const position = win.getPosition();
-    const size = win.getSize();
+    const position = win!.getPosition();
+    const size = win!.getSize();
     return {
       x: position[0],
       y: position[1],
@@ -43,18 +43,18 @@ export default (
     windowState: Position,
     bounds: Position,
   ): boolean => (
-    windowState.x >= bounds.x
-      && windowState.y >= bounds.y
-      && windowState.x + windowState.width <= bounds.x + bounds.width
-      && windowState.y + windowState.height <= bounds.y + bounds.height
+    windowState.x! >= bounds.x!
+      && windowState.y! >= bounds.y!
+      && windowState.x! + windowState.width! <= bounds.x! + bounds.width!
+      && windowState.y! + windowState.height! <= bounds.y! + bounds.height!
   );
 
   const resetToDefaults = (): Position => {
     const { bounds } = screen.getPrimaryDisplay();
     return {
       ...defaultSize,
-      x: (bounds.width - defaultSize.width) / 2,
-      y: (bounds.height - defaultSize.height) / 2,
+      x: (bounds.width - defaultSize.width!) / 2,
+      y: (bounds.height - defaultSize.height!) / 2,
     };
   };
 
@@ -70,7 +70,7 @@ export default (
   };
 
   const saveState = () => {
-    if (!win.isMinimized() && !win.isMaximized()) {
+    if (!win?.isMinimized() && !win?.isMaximized()) {
       Object.assign(state, getCurrentPosition());
     }
     store.set(key, state);
