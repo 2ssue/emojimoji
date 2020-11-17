@@ -2,6 +2,11 @@ import { app, globalShortcut } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
 
+enum ProcessPlatform{
+  MacOs = 'darwin',
+  Windows = 'win32',
+  Linux = 'linux',
+}
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
 if (isProd) {
@@ -35,6 +40,7 @@ if (isProd) {
   });
 
   app.on('browser-window-blur', () => {
+    if (process.platform !== ProcessPlatform.MacOs) return;
     mainWindow.setVisibleOnAllWorkspaces(false);
     app.dock.hide();
   });
